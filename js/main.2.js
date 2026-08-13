@@ -5,7 +5,7 @@ import { createHouse } from "./house.js";
 
 import { Intro } from "./intro.js";
 
-import { Player } from "./player.js";
+import { Controls } from "./controls.js";
 
 
 // =====================================
@@ -120,13 +120,14 @@ const intro =
 
 
 // =====================================
-// PLAYER
+// CONTROLS
 // =====================================
 
-// Don't create the Player yet.
-// The intro gets to run first.
-
-let player = null;
+const controls =
+    new Controls(
+        camera,
+        document.body
+    );
 
 
 // =====================================
@@ -152,39 +153,27 @@ function animate() {
         clock.getDelta();
 
 
-    // Always update the intro.
+    // =================================
+    // INTRO
+    // =================================
 
     intro.update(delta);
 
 
     // =================================
-    // START PLAYER AFTER PLAY
+    // PLAYER CONTROLS
     // =================================
 
-    if (
-        intro.finished &&
-        player === null
-    ) {
+    if (intro.finished) {
 
-        player =
-            new Player(
-                camera,
-                renderer
-            );
+        controls.update(delta);
 
     }
 
 
     // =================================
-    // PLAYER UPDATE
+    // RENDER
     // =================================
-
-    if (player !== null) {
-
-        player.update(delta);
-
-    }
-
 
     renderer.render(
         scene,
