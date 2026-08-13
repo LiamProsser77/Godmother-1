@@ -1,32 +1,19 @@
-// ========================================
-// GODMOTHER 1
-// MAIN GAME
-// ========================================
-
 import * as THREE from
     "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js";
 
-import { createHouse } from
-    "./house.js";
+import { createHouse } from "./house.js";
 
-import { Intro } from
-    "./intro.js";
-
-import { Player } from
-    "./player.js";
+import { Intro } from "./intro.js";
 
 
-// ========================================
+// =====================================
 // SCENE
-// ========================================
+// =====================================
 
-const scene =
-    new THREE.Scene();
+const scene = new THREE.Scene();
 
 scene.background =
-    new THREE.Color(
-        0x050505
-    );
+    new THREE.Color(0x050505);
 
 scene.fog =
     new THREE.Fog(
@@ -36,26 +23,23 @@ scene.fog =
     );
 
 
-// ========================================
+// =====================================
 // CAMERA
-// ========================================
+// =====================================
 
 const camera =
     new THREE.PerspectiveCamera(
-        75,
-
+        60,
         window.innerWidth /
         window.innerHeight,
-
         0.1,
-
         100
     );
 
 
-// ========================================
+// =====================================
 // RENDERER
-// ========================================
+// =====================================
 
 const renderer =
     new THREE.WebGLRenderer({
@@ -74,8 +58,7 @@ renderer.setPixelRatio(
     )
 );
 
-renderer.shadowMap.enabled =
-    true;
+renderer.shadowMap.enabled = true;
 
 renderer.shadowMap.type =
     THREE.PCFSoftShadowMap;
@@ -85,19 +68,17 @@ document.body.appendChild(
 );
 
 
-// ========================================
+// =====================================
 // LIGHTING
-// ========================================
+// =====================================
 
-const ambientLight =
+const ambient =
     new THREE.AmbientLight(
         0x777777,
         0.28
     );
 
-scene.add(
-    ambientLight
-);
+scene.add(ambient);
 
 
 const ceilingLight =
@@ -113,37 +94,21 @@ ceilingLight.position.set(
     1
 );
 
-ceilingLight.castShadow =
-    true;
+ceilingLight.castShadow = true;
 
-scene.add(
-    ceilingLight
-);
+scene.add(ceilingLight);
 
 
-// ========================================
+// =====================================
 // HOUSE
-// ========================================
+// =====================================
 
-createHouse(
-    scene
-);
+createHouse(scene);
 
 
-// ========================================
-// PLAYER
-// ========================================
-
-const player =
-    new Player(
-        camera,
-        renderer
-    );
-
-
-// ========================================
+// =====================================
 // INTRO
-// ========================================
+// =====================================
 
 const intro =
     new Intro(
@@ -152,17 +117,17 @@ const intro =
     );
 
 
-// ========================================
+// =====================================
 // CLOCK
-// ========================================
+// =====================================
 
 const clock =
     new THREE.Clock();
 
 
-// ========================================
+// =====================================
 // GAME LOOP
-// ========================================
+// =====================================
 
 function animate() {
 
@@ -170,38 +135,10 @@ function animate() {
         animate
     );
 
-
     const delta =
         clock.getDelta();
 
-
-    // Intro cinematic
-
-    if (
-        !intro.finished
-    ) {
-
-        intro.update(
-            delta
-        );
-
-    }
-
-
-    // Player movement
-
-    if (
-        intro.finished
-    ) {
-
-        player.update(
-            delta
-        );
-
-    }
-
-
-    // Render
+    intro.update(delta);
 
     renderer.render(
         scene,
@@ -209,13 +146,12 @@ function animate() {
     );
 }
 
-
 animate();
 
 
-// ========================================
+// =====================================
 // RESIZE
-// ========================================
+// =====================================
 
 window.addEventListener(
     "resize",
@@ -231,6 +167,5 @@ window.addEventListener(
             window.innerWidth,
             window.innerHeight
         );
-
     }
 );
