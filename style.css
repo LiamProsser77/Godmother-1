@@ -1,9 +1,15 @@
+/* =====================================
+   GODMOTHER 1
+   MAIN STYLES
+   ===================================== */
+
 * {
     box-sizing: border-box;
 }
 
 html,
 body {
+
     margin: 0;
     padding: 0;
 
@@ -14,14 +20,25 @@ body {
 
     background: #000;
 
-    font-family: Arial, Helvetica, sans-serif;
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
 }
 
+
+/* =====================================
+   THREE.JS
+   ===================================== */
+
 canvas {
+
     display: block;
+
     width: 100%;
     height: 100%;
 }
+
 
 /* =====================================
    INTRO
@@ -42,13 +59,25 @@ canvas {
 
     flex-direction: column;
 
-    background: transparent;
+    /*
+       We let the 3D house show behind
+       the title instead of using another
+       giant black background.
+    */
+
+    background:
+        transparent;
 
     transition:
         opacity 1.2s ease;
 
     pointer-events: auto;
 }
+
+
+/* =====================================
+   DARK CINEMATIC VIGNETTE
+   ===================================== */
 
 #intro::before {
 
@@ -58,24 +87,21 @@ canvas {
 
     inset: 0;
 
+    pointer-events: none;
+
     background:
         radial-gradient(
             ellipse at center,
-            transparent 15%,
-            rgba(0,0,0,0.35) 55%,
-            rgba(0,0,0,0.9) 100%
+            transparent 10%,
+            rgba(0, 0, 0, 0.25) 45%,
+            rgba(0, 0, 0, 0.85) 100%
         );
 
-    pointer-events: none;
 }
 
-#intro.hidden {
-    opacity: 0;
-    pointer-events: none;
-}
 
 /* =====================================
-   GOOEY TITLE
+   TITLE IMAGE
    ===================================== */
 
 #title {
@@ -87,10 +113,10 @@ canvas {
     display: flex;
 
     align-items: center;
-
     justify-content: center;
 
-    gap: 14px;
+    width:
+        min(850px, 85vw);
 
     opacity: 0;
 
@@ -102,38 +128,54 @@ canvas {
         opacity 1s ease,
         transform 1s ease;
 
-    font-family:
-        Impact,
-        Haettenschweiler,
-        "Arial Narrow Bold",
-        sans-serif;
+    pointer-events: none;
+}
 
-    font-size:
-        clamp(55px, 9vw, 140px);
 
-    font-weight: 900;
+/* =====================================
+   GODMOTHER 1 IMAGE
+   ===================================== */
 
-    letter-spacing: 3px;
+#title img {
 
-    color: #8cff00;
+    display: block;
+
+    width: 100%;
+
+    height: auto;
+
+    max-height: 300px;
+
+    object-fit: contain;
 
     /*
-       Thick gooey appearance
+       Makes the green logo stand out
+       without changing the actual image.
     */
 
     filter:
-        drop-shadow(0 0 5px #8cff00)
-        drop-shadow(0 0 18px #55a900);
+        drop-shadow(
+            0 0 5px
+            rgba(140, 255, 0, 0.8)
+        )
 
-    text-shadow:
+        drop-shadow(
+            0 0 18px
+            rgba(80, 180, 0, 0.45)
+        );
 
-        0 3px 0 #5ba500,
-
-        0 6px 0 #4c8d00,
-
-        0 10px 10px rgba(0,0,0,0.8);
+    animation:
+        logoPulse
+        2.5s
+        ease-in-out
+        infinite;
 
 }
+
+
+/* =====================================
+   TITLE APPEARS
+   ===================================== */
 
 #title.visible {
 
@@ -143,125 +185,38 @@ canvas {
         translateY(0)
         scale(1);
 
-    animation:
-        gooPulse 2.5s
-        ease-in-out
-        infinite;
 }
 
-/* =====================================
-   DRIPS
-   ===================================== */
-
-#title::after {
-
-    content: "";
-
-    position: absolute;
-
-    left: 8%;
-
-    right: 8%;
-
-    bottom: -32px;
-
-    height: 45px;
-
-    background:
-
-        radial-gradient(
-            ellipse 12px 35px at 10% 0%,
-            #8cff00 0%,
-            #8cff00 55%,
-            transparent 57%
-        ),
-
-        radial-gradient(
-            ellipse 10px 30px at 30% 0%,
-            #8cff00 0%,
-            #8cff00 55%,
-            transparent 57%
-        ),
-
-        radial-gradient(
-            ellipse 15px 40px at 51% 0%,
-            #8cff00 0%,
-            #8cff00 55%,
-            transparent 57%
-        ),
-
-        radial-gradient(
-            ellipse 9px 28px at 72% 0%,
-            #8cff00 0%,
-            #8cff00 55%,
-            transparent 57%
-        ),
-
-        radial-gradient(
-            ellipse 13px 34px at 91% 0%,
-            #8cff00 0%,
-            #8cff00 55%,
-            transparent 57%
-        );
-
-    filter:
-        blur(0.5px)
-        drop-shadow(
-            0 0 6px #69c400
-        );
-
-    animation:
-        slimeDrip 2.2s
-        ease-in-out
-        infinite;
-
-}
 
 /* =====================================
-   GOO ANIMATION
+   SUBTLE LOGO MOVEMENT
    ===================================== */
 
-@keyframes gooPulse {
+@keyframes logoPulse {
 
     0% {
+
         transform:
-            translateY(0)
             scale(1);
+
     }
 
     50% {
+
         transform:
-            translateY(2px)
             scale(1.025);
+
     }
 
     100% {
+
         transform:
-            translateY(0)
             scale(1);
+
     }
+
 }
 
-@keyframes slimeDrip {
-
-    0% {
-        transform:
-            scaleY(0.8);
-        opacity: 0.7;
-    }
-
-    50% {
-        transform:
-            scaleY(1.15);
-        opacity: 1;
-    }
-
-    100% {
-        transform:
-            scaleY(0.8);
-        opacity: 0.7;
-    }
-}
 
 /* =====================================
    PLAY BUTTON
@@ -273,14 +228,15 @@ canvas {
 
     z-index: 5;
 
-    margin-top: 65px;
+    margin-top: 55px;
 
     min-width: 190px;
 
-    padding: 14px 40px;
+    padding:
+        14px 40px;
 
     background:
-        rgba(0,0,0,0.7);
+        rgba(0, 0, 0, 0.72);
 
     border:
         2px solid #8cff00;
@@ -288,45 +244,92 @@ canvas {
     color:
         #8cff00;
 
-    font-size: 18px;
+    font-size:
+        18px;
 
-    font-weight: bold;
+    font-weight:
+        bold;
 
-    letter-spacing: 5px;
+    letter-spacing:
+        5px;
 
-    cursor: pointer;
+    cursor:
+        pointer;
 
     opacity: 0;
 
     transition:
+
         opacity 0.8s ease,
+
         background 0.2s ease,
+
         color 0.2s ease,
-        transform 0.2s ease;
+
+        transform 0.2s ease,
+
+        box-shadow 0.2s ease;
 
 }
+
+
+/* =====================================
+   PLAY APPEARS
+   ===================================== */
 
 #playButton.visible {
+
     opacity: 1;
+
 }
+
+
+/* =====================================
+   PLAY HOVER
+   ===================================== */
 
 #playButton:hover {
 
-    background: #8cff00;
+    background:
+        #8cff00;
 
-    color: #050505;
+    color:
+        #050505;
 
     box-shadow:
-        0 0 20px rgba(
-            140,
-            255,
-            0,
-            0.7
-        );
+        0 0 20px
+        rgba(140, 255, 0, 0.7);
 
     transform:
         scale(1.05);
+
 }
+
+
+/* =====================================
+   PLAY CLICK
+   ===================================== */
+
+#playButton:active {
+
+    transform:
+        scale(0.97);
+
+}
+
+
+/* =====================================
+   INTRO FADES OUT
+   ===================================== */
+
+#intro.hidden {
+
+    opacity: 0;
+
+    pointer-events: none;
+
+}
+
 
 /* =====================================
    GAME UI
@@ -343,7 +346,13 @@ canvas {
     pointer-events: none;
 
     display: none;
+
 }
+
+
+/* =====================================
+   CROSSHAIR
+   ===================================== */
 
 #crosshair {
 
@@ -355,10 +364,14 @@ canvas {
     transform:
         translate(-50%, -50%);
 
-    color: white;
+    color:
+        rgba(255, 255, 255, 0.85);
 
-    font-size: 18px;
+    font-size:
+        18px;
+
 }
+
 
 /* =====================================
    MOBILE
@@ -368,17 +381,32 @@ canvas {
 
     #title {
 
-        font-size: 48px;
+        width:
+            90vw;
 
-        letter-spacing: 2px;
+    }
+
+    #title img {
+
+        max-height:
+            220px;
+
     }
 
     #playButton {
 
-        margin-top: 45px;
+        margin-top:
+            35px;
 
-        min-width: 160px;
+        min-width:
+            160px;
 
-        font-size: 16px;
+        padding:
+            12px 30px;
+
+        font-size:
+            16px;
+
     }
+
 }
