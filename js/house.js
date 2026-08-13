@@ -1,168 +1,312 @@
-import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js";
+import * as THREE from
+    "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js";
 
-const wallMaterial = new THREE.MeshStandardMaterial({
-    color: 0x4a4038
-});
 
-const floorMaterial = new THREE.MeshStandardMaterial({
-    color: 0x302820
-});
+const wallMaterial =
+    new THREE.MeshStandardMaterial({
+        color: 0x4b4037
+    });
 
-const ceilingMaterial = new THREE.MeshStandardMaterial({
-    color: 0x211c19
-});
 
-function createBox(scene, x, y, z, width, height, depth, material) {
+const floorMaterial =
+    new THREE.MeshStandardMaterial({
+        color: 0x29221d
+    });
 
-    const geometry = new THREE.BoxGeometry(
-        width,
-        height,
-        depth
+
+const ceilingMaterial =
+    new THREE.MeshStandardMaterial({
+        color: 0x191614
+    });
+
+
+const woodMaterial =
+    new THREE.MeshStandardMaterial({
+        color: 0x211611
+    });
+
+
+function box(
+    scene,
+    x,
+    y,
+    z,
+    width,
+    height,
+    depth,
+    material
+) {
+
+    const geometry =
+        new THREE.BoxGeometry(
+            width,
+            height,
+            depth
+        );
+
+    const object =
+        new THREE.Mesh(
+            geometry,
+            material
+        );
+
+    object.position.set(
+        x,
+        y,
+        z
     );
 
-    const mesh = new THREE.Mesh(
-        geometry,
-        material
-    );
+    object.castShadow = true;
 
-    mesh.position.set(x, y, z);
+    object.receiveShadow = true;
 
-    mesh.castShadow = true;
-    mesh.receiveShadow = true;
+    scene.add(object);
 
-    scene.add(mesh);
-
-    return mesh;
+    return object;
 }
+
 
 export function createHouse(scene) {
 
-    // =========================
+    // =================================
     // FLOOR
-    // =========================
+    // =================================
 
-    createBox(
+    box(
         scene,
         0,
         -0.1,
         0,
-        20,
+        18,
         0.2,
-        20,
+        18,
         floorMaterial
     );
 
-    // =========================
-    // CEILING
-    // =========================
 
-    createBox(
+    // =================================
+    // CEILING
+    // =================================
+
+    box(
         scene,
         0,
         4,
         0,
-        20,
+        18,
         0.2,
-        20,
+        18,
         ceilingMaterial
     );
 
-    // =========================
-    // OUTSIDE WALLS
-    // =========================
 
-    // Back
-    createBox(
+    // =================================
+    // OUTER WALLS
+    // =================================
+
+    box(
         scene,
         0,
         2,
-        -10,
-        20,
+        -9,
+        18,
         4,
         0.3,
         wallMaterial
     );
 
-    // Left
-    createBox(
+    box(
         scene,
-        -10,
+        -9,
         2,
         0,
         0.3,
         4,
-        20,
+        18,
         wallMaterial
     );
 
-    // Right
-    createBox(
+    box(
         scene,
-        10,
+        9,
         2,
         0,
         0.3,
         4,
-        20,
+        18,
         wallMaterial
     );
 
-    // Front
-    createBox(
+    /*
+       Front wall is split so the
+       front door has an opening.
+    */
+
+    box(
         scene,
-        0,
+        -6,
         2,
-        10,
-        20,
+        9,
+        6,
         4,
         0.3,
         wallMaterial
     );
 
-    // =========================
-    // KITCHEN
-    // =========================
+    box(
+        scene,
+        6,
+        2,
+        9,
+        6,
+        4,
+        0.3,
+        wallMaterial
+    );
 
-    createBox(
+
+    // =================================
+    // ROOM WALLS
+    // =================================
+
+    // Kitchen / living-room divider
+
+    box(
         scene,
         -4,
         2,
+        3,
+        0.25,
         4,
-        0.3,
-        4,
-        8,
+        6,
         wallMaterial
     );
 
-    // =========================
-    // GUEST BEDROOM
-    // =========================
 
-    createBox(
+    // Guest bedroom
+
+    box(
+        scene,
+        -4.5,
+        2,
+        -4,
+        9,
+        4,
+        0.25,
+        wallMaterial
+    );
+
+
+    // Godmother's bedroom
+
+    box(
+        scene,
+        4.5,
+        2,
+        -4,
+        9,
+        4,
+        0.25,
+        wallMaterial
+    );
+
+
+    // =================================
+    // FRONT DOOR
+    // =================================
+
+    box(
+        scene,
+        0,
+        1.5,
+        8.82,
+        2,
+        3,
+        0.15,
+        woodMaterial
+    );
+
+
+    // =================================
+    // SIMPLE ATTIC ACCESS
+    // =================================
+
+    const atticHole =
+        new THREE.Mesh(
+            new THREE.BoxGeometry(
+                2,
+                0.1,
+                2
+            ),
+            woodMaterial
+        );
+
+    atticHole.position.set(
+        5,
+        3.9,
+        -5
+    );
+
+    scene.add(
+        atticHole
+    );
+
+
+    // =================================
+    // LIGHTS
+    // =================================
+
+    createRoomLight(
         scene,
         -5,
-        2,
-        -4,
-        10,
-        4,
-        0.3,
-        wallMaterial
+        3.3,
+        5
     );
 
-    // =========================
-    // GODMOTHER'S BEDROOM
-    // =========================
+    createRoomLight(
+        scene,
+        4,
+        3.3,
+        5
+    );
 
-    createBox(
+    createRoomLight(
+        scene,
+        -5,
+        3.3,
+        -5
+    );
+
+    createRoomLight(
         scene,
         5,
-        2,
-        -4,
-        10,
-        4,
-        0.3,
-        wallMaterial
+        3.3,
+        -5
+    );
+}
+
+
+function createRoomLight(
+    scene,
+    x,
+    y,
+    z
+) {
+
+    const light =
+        new THREE.PointLight(
+            0xffc98b,
+            0.8,
+            8
+        );
+
+    light.position.set(
+        x,
+        y,
+        z
     );
 
-    console.log("Godmother 1 house loaded.");
+    light.castShadow = true;
+
+    scene.add(light);
 }
