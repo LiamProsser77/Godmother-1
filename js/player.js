@@ -1,96 +1,215 @@
-import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js";
-import { PointerLockControls } from "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/controls/PointerLockControls.js";
+import * as THREE from
+    "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js";
+
+import { PointerLockControls } from
+    "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/controls/PointerLockControls.js";
+
 
 export class Player {
 
-    constructor(camera, domElement) {
+    constructor(camera, renderer) {
 
         this.camera = camera;
 
-        this.controls = new PointerLockControls(
-            camera,
-            domElement
-        );
+        this.renderer = renderer;
+
+        this.controls =
+            new PointerLockControls(
+                camera,
+                document.body
+            );
 
         this.speed = 3.5;
 
         this.keys = {
-            forward: false,
-            backward: false,
-            left: false,
-            right: false
+            w: false,
+            a: false,
+            s: false,
+            d: false
         };
 
-        this.setupControls();
+        this.setupKeyboard();
+
+        this.setupMouse();
     }
 
-    setupControls() {
 
-        document.addEventListener("keydown", (event) => {
+    // =====================================
+    // KEYBOARD
+    // =====================================
 
-            if (event.code === "KeyW")
-                this.keys.forward = true;
+    setupKeyboard() {
 
-            if (event.code === "KeyS")
-                this.keys.backward = true;
+        document.addEventListener(
+            "keydown",
+            (event) => {
 
-            if (event.code === "KeyA")
-                this.keys.left = true;
+                if (event.code === "KeyW") {
+                    this.keys.w = true;
+                }
 
-            if (event.code === "KeyD")
-                this.keys.right = true;
-        });
+                if (event.code === "KeyA") {
+                    this.keys.a = true;
+                }
 
-        document.addEventListener("keyup", (event) => {
+                if (event.code === "KeyS") {
+                    this.keys.s = true;
+                }
 
-            if (event.code === "KeyW")
-                this.keys.forward = false;
+                if (event.code === "KeyD") {
+                    this.keys.d = true;
+                }
+            }
+        );
 
-            if (event.code === "KeyS")
-                this.keys.backward = false;
 
-            if (event.code === "KeyA")
-                this.keys.left = false;
+        document.addEventListener(
+            "keyup",
+            (event) => {
 
-            if (event.code === "KeyD")
-                this.keys.right = false;
-        });
+                if (event.code === "KeyW") {
+                    this.keys.w = false;
+                }
+
+                if (event.code === "KeyA") {
+                    this.keys.a = false;
+                }
+
+                if (event.code === "KeyS") {
+                    this.keys.s = false;
+                }
+
+                if (event.code === "KeyD") {
+                    this.keys.d = false;
+                }
+            }
+        );
     }
+
+
+    // =====================================
+    // MOUSE / POINTER LOCK
+    // =====================================
+
+    setupMouse() {
+
+        document.addEventListener(
+            "click",
+            () => {
+
+                if (
+                    !this.controls.isLocked
+                ) {
+
+                    this.controls.lock();
+
+                }
+            }
+        );
+
+
+        this.controls.addEventListener(
+            "lock",
+            () => {
+
+                console.log(
+                    "Mouse locked"
+                );
+
+            }
+        );
+
+
+        this.controls.addEventListener(
+            "unlock",
+            () => {
+
+                console.log(
+                    "Mouse unlocked"
+                );
+
+            }
+        );
+    }
+
+
+    // =====================================
+    // MOVEMENT
+    // =====================================
 
     update(delta) {
 
-        if (!this.controls.isLocked) {
+        if (
+            !this.controls.isLocked
+        ) {
+
             return;
+
         }
+
 
         const movement =
             this.speed * delta;
 
-        if (this.keys.forward) {
-            this.controls.moveForward(movement);
+
+        if (this.keys.w) {
+
+            this.controls.moveForward(
+                movement
+            );
+
         }
 
-        if (this.keys.backward) {
-            this.controls.moveForward(-movement);
+
+        if (this.keys.s) {
+
+            this.controls.moveForward(
+                -movement
+            );
+
         }
 
-        if (this.keys.left) {
-            this.controls.moveRight(-movement);
+
+        if (this.keys.a) {
+
+            this.controls.moveRight(
+                -movement
+            );
+
         }
 
-        if (this.keys.right) {
-            this.controls.moveRight(movement);
-        }
 
-        // Keep player's eyes at a realistic height
-        this.camera.position.y = 1.7;
+        if (this.keys.d) {
+
+            this.controls.moveRight(
+                movement
+            );
+
+        }
     }
+
+
+    // =====================================
+    // LOCK STATE
+    // =====================================
+
+    isLocked() {
+
+        return this.controls.isLocked;
+
+    }
+
 
     lock() {
+
         this.controls.lock();
+
     }
 
-    isPlaying() {
-        return this.controls.isLocked;
+
+    unlock() {
+
+        this.controls.unlock();
+
     }
 }
