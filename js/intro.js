@@ -21,20 +21,32 @@ export class Intro {
 
         this.godmother = new THREE.Group();
 
-        // Dress
+        // =================================
+        // DRESS
+        // =================================
+
         const dress = new THREE.Mesh(
-            new THREE.ConeGeometry(0.75, 2.1, 32),
+            new THREE.ConeGeometry(
+                0.75,
+                2.1,
+                32
+            ),
             new THREE.MeshStandardMaterial({
                 color: 0x171717,
                 roughness: 0.85
             })
         );
 
-        dress.position.y = 1.05;
+        dress.position.y = 1;
         dress.castShadow = true;
+
         this.godmother.add(dress);
 
-        // Upper body
+
+        // =================================
+        // UPPER BODY
+        // =================================
+
         const body = new THREE.Mesh(
             new THREE.CylinderGeometry(
                 0.38,
@@ -49,12 +61,22 @@ export class Intro {
         );
 
         body.position.y = 2;
+
         body.castShadow = true;
+
         this.godmother.add(body);
 
-        // Head
+
+        // =================================
+        // HEAD
+        // =================================
+
         const head = new THREE.Mesh(
-            new THREE.SphereGeometry(0.34, 32, 32),
+            new THREE.SphereGeometry(
+                0.34,
+                32,
+                32
+            ),
             new THREE.MeshStandardMaterial({
                 color: 0xb88970,
                 roughness: 0.95
@@ -62,30 +84,56 @@ export class Intro {
         );
 
         head.position.y = 2.65;
+
         head.castShadow = true;
+
         this.godmother.add(head);
 
-        // Gray hair
+
+        // =================================
+        // HAIR
+        // =================================
+
         const hair = new THREE.Mesh(
-            new THREE.SphereGeometry(0.38, 32, 32),
+            new THREE.SphereGeometry(
+                0.38,
+                32,
+                32
+            ),
             new THREE.MeshStandardMaterial({
                 color: 0x777777,
                 roughness: 1
             })
         );
 
-        hair.position.set(0, 2.8, -0.04);
-        hair.scale.set(1, 0.85, 0.9);
+        hair.position.set(
+            0,
+            2.8,
+            -0.04
+        );
+
+        hair.scale.set(
+            1,
+            0.85,
+            0.9
+        );
+
         hair.castShadow = true;
+
         this.godmother.add(hair);
 
-        // Left arm
-        const armGeometry = new THREE.CylinderGeometry(
-            0.11,
-            0.14,
-            1.3,
-            16
-        );
+
+        // =================================
+        // ARMS
+        // =================================
+
+        const armGeometry =
+            new THREE.CylinderGeometry(
+                0.11,
+                0.14,
+                1.3,
+                16
+            );
 
         const armMaterial =
             new THREE.MeshStandardMaterial({
@@ -93,10 +141,12 @@ export class Intro {
                 roughness: 0.9
             });
 
-        this.leftArm = new THREE.Mesh(
-            armGeometry,
-            armMaterial
-        );
+
+        this.leftArm =
+            new THREE.Mesh(
+                armGeometry,
+                armMaterial
+            );
 
         this.leftArm.position.set(
             -0.48,
@@ -104,16 +154,21 @@ export class Intro {
             0
         );
 
-        this.leftArm.rotation.z = -0.2;
+        this.leftArm.rotation.z =
+            -0.2;
+
         this.leftArm.castShadow = true;
 
-        this.godmother.add(this.leftArm);
-
-        // Right arm
-        this.rightArm = new THREE.Mesh(
-            armGeometry,
-            armMaterial
+        this.godmother.add(
+            this.leftArm
         );
+
+
+        this.rightArm =
+            new THREE.Mesh(
+                armGeometry,
+                armMaterial
+            );
 
         this.rightArm.position.set(
             0.48,
@@ -121,28 +176,51 @@ export class Intro {
             0
         );
 
-        this.rightArm.rotation.z = 0.2;
+        this.rightArm.rotation.z =
+            0.2;
+
         this.rightArm.castShadow = true;
 
-        this.godmother.add(this.rightArm);
+        this.godmother.add(
+            this.rightArm
+        );
 
-        // Position her where the camera can actually see her
+
+        // =================================
+        // STARTING POSITION
+        // =================================
+
         this.godmother.position.set(
             -5,
             0,
             1
         );
 
-        // Face toward the camera
-        this.godmother.rotation.y = 0;
+        /*
+            She walks toward +X,
+            so she faces +X.
+        */
 
-        this.scene.add(this.godmother);
+        this.godmother.rotation.y =
+            -Math.PI / 2;
+
+
+        this.scene.add(
+            this.godmother
+        );
     }
+
+
+    // =================================
+    // PLAY BUTTON
+    // =================================
 
     setupButton() {
 
         const button =
-            document.getElementById("playButton");
+            document.getElementById(
+                "playButton"
+            );
 
         button.addEventListener(
             "click",
@@ -150,23 +228,44 @@ export class Intro {
         );
     }
 
+
+    // =================================
+    // START GAME
+    // =================================
+
     startGame() {
 
         this.finished = true;
 
         const intro =
-            document.getElementById("intro");
+            document.getElementById(
+                "intro"
+            );
 
-        intro.classList.add("hidden");
+        intro.classList.add(
+            "hidden"
+        );
 
-        setTimeout(() => {
-            intro.style.display = "none";
-        }, 1500);
+        setTimeout(
+            () => {
+
+                intro.style.display =
+                    "none";
+
+            },
+            1500
+        );
 
         document.getElementById(
             "gameUI"
-        ).style.display = "block";
+        ).style.display =
+            "block";
     }
+
+
+    // =================================
+    // UPDATE
+    // =================================
 
     update(delta) {
 
@@ -175,6 +274,7 @@ export class Intro {
         }
 
         this.time += delta;
+
 
         // =================================
         // CAMERA
@@ -191,12 +291,18 @@ export class Intro {
             );
         }
 
-        // Slowly move camera forward
+
         const progress =
-            Math.min(this.time / 4, 1);
+            Math.min(
+                this.time / 4,
+                1
+            );
+
 
         this.camera.position.z =
-            7 - progress * 3;
+            7 -
+            progress * 3;
+
 
         this.camera.lookAt(
             0,
@@ -204,34 +310,60 @@ export class Intro {
             0
         );
 
+
         // =================================
         // GODMOTHER WALK
         // =================================
 
-        if (this.time >= 0.4 &&
-            this.time <= 3.8) {
+        if (
+            this.time >= 0.4 &&
+            this.time <= 3.8
+        ) {
 
             const walk =
                 this.time - 0.4;
 
+
+            // Move from left to right
+
             this.godmother.position.x =
-                -5 + walk * 2.7;
+                -5 +
+                walk * 2.7;
+
+
+            // Face the direction
+            // she is walking
+
+            this.godmother.rotation.y =
+                -Math.PI / 2;
+
 
             // Walking bounce
+
             this.godmother.position.y =
                 Math.abs(
-                    Math.sin(this.time * 8)
+                    Math.sin(
+                        this.time * 8
+                    )
                 ) * 0.035;
 
-            // Arm swing
+
+            // Arm movement
+
             this.leftArm.rotation.z =
                 -0.2 +
-                Math.sin(this.time * 8) * 0.25;
+                Math.sin(
+                    this.time * 8
+                ) * 0.25;
+
 
             this.rightArm.rotation.z =
                 0.2 -
-                Math.sin(this.time * 8) * 0.25;
+                Math.sin(
+                    this.time * 8
+                ) * 0.25;
         }
+
 
         // =================================
         // TITLE
@@ -254,19 +386,26 @@ export class Intro {
                     "playButton"
                 );
 
+
             title.classList.add(
                 "visible"
             );
 
-            setTimeout(() => {
 
-                if (!this.finished) {
-                    button.classList.add(
-                        "visible"
-                    );
-                }
+            setTimeout(
+                () => {
 
-            }, 650);
+                    if (!this.finished) {
+
+                        button.classList.add(
+                            "visible"
+                        );
+
+                    }
+
+                },
+                650
+            );
         }
     }
 }
