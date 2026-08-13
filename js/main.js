@@ -5,6 +5,8 @@ import { createHouse } from "./house.js";
 
 import { Intro } from "./intro.js";
 
+import { PointerLock } from "./pointerlock.js";
+
 
 // =====================================
 // SCENE
