@@ -7,7 +7,6 @@ export class Intro {
     constructor(scene, camera) {
 
         this.scene = scene;
-
         this.camera = camera;
 
         this.time = 0;
@@ -21,12 +20,11 @@ export class Intro {
         this.createGodmother();
 
         this.setupButton();
-
     }
 
 
     // =================================
-    // GODMOTHER PLACEHOLDER
+    // GODMOTHER
     // =================================
 
     createGodmother() {
@@ -35,7 +33,9 @@ export class Intro {
             new THREE.Group();
 
 
-        // Body / dress
+        // ---------------------------------
+        // Black Victorian-style dress
+        // ---------------------------------
 
         const dress =
             new THREE.Mesh(
@@ -45,21 +45,21 @@ export class Intro {
                     24
                 ),
                 new THREE.MeshStandardMaterial({
-                    color: 0x090909
+                    color: 0x080808,
+                    roughness: 0.9
                 })
             );
 
-        dress.position.y =
-            1;
+        dress.position.y = 1;
 
         dress.castShadow = true;
 
-        this.godmother.add(
-            dress
-        );
+        this.godmother.add(dress);
 
 
+        // ---------------------------------
         // Head
+        // ---------------------------------
 
         const head =
             new THREE.Mesh(
@@ -69,21 +69,21 @@ export class Intro {
                     24
                 ),
                 new THREE.MeshStandardMaterial({
-                    color: 0xc7a58d
+                    color: 0xc7a58d,
+                    roughness: 0.9
                 })
             );
 
-        head.position.y =
-            2.15;
+        head.position.y = 2.15;
 
         head.castShadow = true;
 
-        this.godmother.add(
-            head
-        );
+        this.godmother.add(head);
 
 
-        // Hair
+        // ---------------------------------
+        // Gray hair
+        // ---------------------------------
 
         const hair =
             new THREE.Mesh(
@@ -93,7 +93,8 @@ export class Intro {
                     24
                 ),
                 new THREE.MeshStandardMaterial({
-                    color: 0x777777
+                    color: 0x777777,
+                    roughness: 1
                 })
             );
 
@@ -111,12 +112,12 @@ export class Intro {
 
         hair.castShadow = true;
 
-        this.godmother.add(
-            hair
-        );
+        this.godmother.add(hair);
 
 
+        // ---------------------------------
         // Arms
+        // ---------------------------------
 
         const armGeometry =
             new THREE.CylinderGeometry(
@@ -128,7 +129,8 @@ export class Intro {
 
         const armMaterial =
             new THREE.MeshStandardMaterial({
-                color: 0x0b0b0b
+                color: 0x080808,
+                roughness: 0.9
             });
 
 
@@ -147,9 +149,9 @@ export class Intro {
         leftArm.rotation.z =
             -0.18;
 
-        this.godmother.add(
-            leftArm
-        );
+        leftArm.castShadow = true;
+
+        this.godmother.add(leftArm);
 
 
         const rightArm =
@@ -167,17 +169,20 @@ export class Intro {
         rightArm.rotation.z =
             0.18;
 
-        this.godmother.add(
-            rightArm
-        );
+        rightArm.castShadow = true;
 
+        this.godmother.add(rightArm);
+
+
+        // ---------------------------------
+        // Starting position
+        // ---------------------------------
 
         this.godmother.position.set(
             -7,
             0,
             -1
         );
-
 
         this.godmother.rotation.y =
             Math.PI / 2;
@@ -219,6 +224,7 @@ export class Intro {
 
         this.finished = true;
 
+
         const intro =
             document.getElementById(
                 "intro"
@@ -227,6 +233,7 @@ export class Intro {
         intro.classList.add(
             "hidden"
         );
+
 
         setTimeout(
             () => {
@@ -238,10 +245,12 @@ export class Intro {
             1500
         );
 
+
         document.getElementById(
             "gameUI"
         ).style.display =
             "block";
+
 
         console.log(
             "Godmother 1 gameplay starting..."
@@ -259,11 +268,12 @@ export class Intro {
             return;
         }
 
+
         this.time += delta;
 
 
         // =================================
-        // CAMERA CINEMATIC
+        // CAMERA START
         // =================================
 
         if (!this.started) {
@@ -284,17 +294,21 @@ export class Intro {
         }
 
 
-        // Slowly move camera
+        // =================================
+        // CAMERA MOVEMENT
+        // =================================
 
         const cameraProgress =
             Math.min(
-                this.time / 7,
+                this.time / 3,
                 1
             );
+
 
         this.camera.position.z =
             6 -
             cameraProgress * 6;
+
 
         this.camera.position.x =
             -6 +
@@ -306,82 +320,101 @@ export class Intro {
         // =================================
 
         if (
-            this.time > 1 &&
-            this.time < 8
+            this.time > 0.5 &&
+            this.time < 3
         ) {
+
+            const walkTime =
+                this.time - 0.5;
+
 
             this.godmother.position.x =
                 -7 +
-                (this.time - 1) * 1.15;
+                walkTime * 2.2;
 
 
-            // Simple walking movement
+            // Slight walking bounce
 
             this.godmother.position.y =
                 Math.sin(
-                    this.time * 7
+                    this.time * 8
                 ) * 0.025;
 
 
-            // Slight arm movement
+            // Arm movement
 
-            const arms =
-                this.godmother.children;
+            const leftArm =
+                this.godmother.children[3];
 
-            if (arms[3]) {
+            const rightArm =
+                this.godmother.children[4];
 
-                arms[3].rotation.z =
+
+            if (leftArm) {
+
+                leftArm.rotation.z =
                     -0.18 +
                     Math.sin(
-                        this.time * 7
+                        this.time * 8
                     ) * 0.15;
             }
 
-            if (arms[4]) {
 
-                arms[4].rotation.z =
+            if (rightArm) {
+
+                rightArm.rotation.z =
                     0.18 -
                     Math.sin(
-                        this.time * 7
+                        this.time * 8
                     ) * 0.15;
             }
         }
 
 
         // =================================
-        // TITLE
+        // SHOW TITLE
         // =================================
 
         if (
-            this.time > 7 &&
+            this.time > 2.5 &&
             !this.titleShown
         ) {
 
             this.titleShown = true;
+
 
             const title =
                 document.getElementById(
                     "title"
                 );
 
+
             const button =
                 document.getElementById(
                     "playButton"
                 );
 
+
             title.classList.add(
                 "visible"
             );
 
+
+            // Show PLAY shortly after title
+
             setTimeout(
                 () => {
 
-                    button.classList.add(
-                        "visible"
-                    );
+                    if (!this.finished) {
+
+                        button.classList.add(
+                            "visible"
+                        );
+
+                    }
 
                 },
-                1300
+                700
             );
         }
     }
