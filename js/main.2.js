@@ -71,17 +71,6 @@ document.body.appendChild(
 
 
 // =====================================
-// PLAYER
-// =====================================
-
-const player =
-    new Player(
-        camera,
-        renderer
-    );
-
-
-// =====================================
 // LIGHTING
 // =====================================
 
@@ -131,6 +120,16 @@ const intro =
 
 
 // =====================================
+// PLAYER
+// =====================================
+
+// Don't create the Player yet.
+// The intro gets to run first.
+
+let player = null;
+
+
+// =====================================
 // CLOCK
 // =====================================
 
@@ -153,10 +152,38 @@ function animate() {
         clock.getDelta();
 
 
+    // Always update the intro.
+
     intro.update(delta);
 
 
-    player.update(delta);
+    // =================================
+    // START PLAYER AFTER PLAY
+    // =================================
+
+    if (
+        intro.finished &&
+        player === null
+    ) {
+
+        player =
+            new Player(
+                camera,
+                renderer
+            );
+
+    }
+
+
+    // =================================
+    // PLAYER UPDATE
+    // =================================
+
+    if (player !== null) {
+
+        player.update(delta);
+
+    }
 
 
     renderer.render(
