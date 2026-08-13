@@ -5,6 +5,8 @@ import { createHouse } from "./house.js";
 
 import { Intro } from "./intro.js";
 
+import { PointerLock } from "./pointerlock.js";
+
 
 // =====================================
 // SCENE
@@ -115,6 +117,14 @@ const intro =
         scene,
         camera
     );
+
+
+// =====================================
+// POINTER LOCK
+// =====================================
+
+const pointerLock =
+    new PointerLock(camera);
 
 
 // =====================================
