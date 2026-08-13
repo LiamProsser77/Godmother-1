@@ -5,7 +5,6 @@ import { createHouse } from "./house.js";
 
 import { Intro } from "./intro.js";
 
-import { Player } from "./player.js";
 
 
 // =====================================
@@ -68,17 +67,6 @@ renderer.shadowMap.type =
 document.body.appendChild(
     renderer.domElement
 );
-
-
-// =====================================
-// PLAYER
-// =====================================
-
-const player =
-    new Player(
-        camera,
-        renderer
-    );
 
 
 // =====================================
