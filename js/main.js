@@ -5,7 +5,7 @@ import { createHouse } from "./house.js";
 
 import { Intro } from "./intro.js";
 
-import { PointerLock } from "./pointerlock.js";
+import { PointerLock } from "./player.js";
 
 
 // =====================================
