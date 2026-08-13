@@ -148,17 +148,15 @@ function animate() {
         animate
     );
 
-   const delta =
-    clock.getDelta();
+    const delta =
+        clock.getDelta();
 
-intro.update(delta);
+    intro.update(delta);
 
-player.update(delta);
-
-renderer.render(
-    scene,
-    camera
-);
+    renderer.render(
+        scene,
+        camera
+    );
 }
 
 animate();
