@@ -19,7 +19,6 @@ body {
 
 canvas {
     display: block;
-
     width: 100%;
     height: 100%;
 }
@@ -29,13 +28,12 @@ canvas {
    ===================================== */
 
 #intro {
+
     position: fixed;
 
     inset: 0;
 
     z-index: 100;
-
-    background: #000;
 
     display: flex;
 
@@ -44,17 +42,16 @@ canvas {
 
     flex-direction: column;
 
-    transition: opacity 1.5s ease;
+    background: transparent;
+
+    transition:
+        opacity 1.2s ease;
 
     pointer-events: auto;
 }
 
-/*
-   This darkness lets the 3D cinematic
-   underneath slowly become visible.
-*/
+#intro::before {
 
-#intro::after {
     content: "";
 
     position: absolute;
@@ -65,18 +62,24 @@ canvas {
         radial-gradient(
             ellipse at center,
             transparent 15%,
-            rgba(0, 0, 0, 0.55) 60%,
-            #000 100%
+            rgba(0,0,0,0.35) 55%,
+            rgba(0,0,0,0.9) 100%
         );
 
     pointer-events: none;
 }
 
+#intro.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
 /* =====================================
-   TITLE
+   GOOEY TITLE
    ===================================== */
 
 #title {
+
     position: relative;
 
     z-index: 5;
@@ -84,17 +87,20 @@ canvas {
     display: flex;
 
     align-items: center;
+
     justify-content: center;
 
-    gap: 18px;
+    gap: 14px;
 
     opacity: 0;
 
-    transform: scale(0.96);
+    transform:
+        translateY(15px)
+        scale(0.9);
 
     transition:
-        opacity 2s ease,
-        transform 2s ease;
+        opacity 1s ease,
+        transform 1s ease;
 
     font-family:
         Impact,
@@ -103,47 +109,188 @@ canvas {
         sans-serif;
 
     font-size:
-        clamp(55px, 9vw, 135px);
+        clamp(55px, 9vw, 140px);
 
-    letter-spacing: 5px;
+    font-weight: 900;
+
+    letter-spacing: 3px;
 
     color: #8cff00;
 
+    /*
+       Thick gooey appearance
+    */
+
+    filter:
+        drop-shadow(0 0 5px #8cff00)
+        drop-shadow(0 0 18px #55a900);
+
     text-shadow:
-        0 2px 0 #4e9000,
-        0 0 8px rgba(140, 255, 0, 0.6);
+
+        0 3px 0 #5ba500,
+
+        0 6px 0 #4c8d00,
+
+        0 10px 10px rgba(0,0,0,0.8);
+
 }
 
 #title.visible {
+
     opacity: 1;
 
-    transform: scale(1);
-}
+    transform:
+        translateY(0)
+        scale(1);
 
-#title .one {
-    color: #b4ff48;
+    animation:
+        gooPulse 2.5s
+        ease-in-out
+        infinite;
 }
 
 /* =====================================
-   PLAY
+   DRIPS
+   ===================================== */
+
+#title::after {
+
+    content: "";
+
+    position: absolute;
+
+    left: 8%;
+
+    right: 8%;
+
+    bottom: -32px;
+
+    height: 45px;
+
+    background:
+
+        radial-gradient(
+            ellipse 12px 35px at 10% 0%,
+            #8cff00 0%,
+            #8cff00 55%,
+            transparent 57%
+        ),
+
+        radial-gradient(
+            ellipse 10px 30px at 30% 0%,
+            #8cff00 0%,
+            #8cff00 55%,
+            transparent 57%
+        ),
+
+        radial-gradient(
+            ellipse 15px 40px at 51% 0%,
+            #8cff00 0%,
+            #8cff00 55%,
+            transparent 57%
+        ),
+
+        radial-gradient(
+            ellipse 9px 28px at 72% 0%,
+            #8cff00 0%,
+            #8cff00 55%,
+            transparent 57%
+        ),
+
+        radial-gradient(
+            ellipse 13px 34px at 91% 0%,
+            #8cff00 0%,
+            #8cff00 55%,
+            transparent 57%
+        );
+
+    filter:
+        blur(0.5px)
+        drop-shadow(
+            0 0 6px #69c400
+        );
+
+    animation:
+        slimeDrip 2.2s
+        ease-in-out
+        infinite;
+
+}
+
+/* =====================================
+   GOO ANIMATION
+   ===================================== */
+
+@keyframes gooPulse {
+
+    0% {
+        transform:
+            translateY(0)
+            scale(1);
+    }
+
+    50% {
+        transform:
+            translateY(2px)
+            scale(1.025);
+    }
+
+    100% {
+        transform:
+            translateY(0)
+            scale(1);
+    }
+}
+
+@keyframes slimeDrip {
+
+    0% {
+        transform:
+            scaleY(0.8);
+        opacity: 0.7;
+    }
+
+    50% {
+        transform:
+            scaleY(1.15);
+        opacity: 1;
+    }
+
+    100% {
+        transform:
+            scaleY(0.8);
+        opacity: 0.7;
+    }
+}
+
+/* =====================================
+   PLAY BUTTON
    ===================================== */
 
 #playButton {
+
     position: relative;
 
     z-index: 5;
 
-    margin-top: 55px;
+    margin-top: 65px;
 
-    padding: 13px 45px;
+    min-width: 190px;
 
-    background: transparent;
+    padding: 14px 40px;
 
-    border: 1px solid #8cff00;
+    background:
+        rgba(0,0,0,0.7);
 
-    color: #8cff00;
+    border:
+        2px solid #8cff00;
+
+    color:
+        #8cff00;
 
     font-size: 18px;
+
+    font-weight: bold;
 
     letter-spacing: 5px;
 
@@ -152,9 +299,11 @@ canvas {
     opacity: 0;
 
     transition:
-        opacity 1s ease,
+        opacity 0.8s ease,
         background 0.2s ease,
-        color 0.2s ease;
+        color 0.2s ease,
+        transform 0.2s ease;
+
 }
 
 #playButton.visible {
@@ -162,13 +311,21 @@ canvas {
 }
 
 #playButton:hover {
+
     background: #8cff00;
 
     color: #050505;
-}
 
-#playButton:active {
-    transform: scale(0.97);
+    box-shadow:
+        0 0 20px rgba(
+            140,
+            255,
+            0,
+            0.7
+        );
+
+    transform:
+        scale(1.05);
 }
 
 /* =====================================
@@ -176,6 +333,7 @@ canvas {
    ===================================== */
 
 #gameUI {
+
     position: fixed;
 
     inset: 0;
@@ -188,26 +346,18 @@ canvas {
 }
 
 #crosshair {
+
     position: absolute;
 
     top: 50%;
     left: 50%;
 
-    transform: translate(-50%, -50%);
+    transform:
+        translate(-50%, -50%);
 
-    color: rgba(255, 255, 255, 0.8);
+    color: white;
 
     font-size: 18px;
-}
-
-/* =====================================
-   FADE
-   ===================================== */
-
-#intro.hidden {
-    opacity: 0;
-
-    pointer-events: none;
 }
 
 /* =====================================
@@ -217,17 +367,17 @@ canvas {
 @media (max-width: 700px) {
 
     #title {
+
         font-size: 48px;
 
-        letter-spacing: 3px;
-
-        gap: 10px;
+        letter-spacing: 2px;
     }
 
     #playButton {
-        margin-top: 35px;
 
-        padding: 11px 30px;
+        margin-top: 45px;
+
+        min-width: 160px;
 
         font-size: 16px;
     }
