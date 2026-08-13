@@ -15,22 +15,44 @@ export class PointerLock {
                 document.body
             );
 
-        this.locked = false;
-
-        this.setupEvents();
+        this.setup();
     }
 
 
-    setupEvents() {
+    setup() {
+
+        const playButton =
+            document.getElementById(
+                "playButton"
+            );
+
+
+        // Lock the mouse when PLAY is clicked
+
+        if (playButton) {
+
+            playButton.addEventListener(
+                "click",
+                () => {
+
+                    this.controls.lock();
+
+                }
+            );
+
+        }
+
+
+        // ESC automatically unlocks
+        // PointerLockControls handles this.
+
 
         this.controls.addEventListener(
             "lock",
             () => {
 
-                this.locked = true;
-
                 console.log(
-                    "Mouse locked"
+                    "Pointer locked"
                 );
 
             }
@@ -41,10 +63,8 @@ export class PointerLock {
             "unlock",
             () => {
 
-                this.locked = false;
-
                 console.log(
-                    "Mouse unlocked"
+                    "Pointer unlocked"
                 );
 
             }
@@ -52,23 +72,16 @@ export class PointerLock {
     }
 
 
-    lock() {
-
-        this.controls.lock();
-
-    }
-
-
-    unlock() {
-
-        this.controls.unlock();
-
-    }
-
-
     isLocked() {
 
-        return this.locked;
+        return this.controls.isLocked;
+
+    }
+
+
+    getControls() {
+
+        return this.controls;
 
     }
 }
