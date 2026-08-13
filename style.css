@@ -1,89 +1,234 @@
-import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js";
+* {
+    box-sizing: border-box;
+}
 
-export class Intro {
+html,
+body {
+    margin: 0;
+    padding: 0;
 
-    constructor(scene, camera) {
+    width: 100%;
+    height: 100%;
 
-        this.scene = scene;
-        this.camera = camera;
+    overflow: hidden;
 
-        this.finished = false;
-        this.time = 0;
+    background: #000;
 
-        this.createIntro();
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+canvas {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+}
+
+/* =====================================
+   INTRO
+   ===================================== */
+
+#intro {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 100;
+
+    background: #000;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    flex-direction: column;
+
+    transition: opacity 1.5s ease;
+
+    pointer-events: auto;
+}
+
+/*
+   This darkness lets the 3D cinematic
+   underneath slowly become visible.
+*/
+
+#intro::after {
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    background:
+        radial-gradient(
+            ellipse at center,
+            transparent 15%,
+            rgba(0, 0, 0, 0.55) 60%,
+            #000 100%
+        );
+
+    pointer-events: none;
+}
+
+/* =====================================
+   TITLE
+   ===================================== */
+
+#title {
+    position: relative;
+
+    z-index: 5;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 18px;
+
+    opacity: 0;
+
+    transform: scale(0.96);
+
+    transition:
+        opacity 2s ease,
+        transform 2s ease;
+
+    font-family:
+        Impact,
+        Haettenschweiler,
+        "Arial Narrow Bold",
+        sans-serif;
+
+    font-size:
+        clamp(55px, 9vw, 135px);
+
+    letter-spacing: 5px;
+
+    color: #8cff00;
+
+    text-shadow:
+        0 2px 0 #4e9000,
+        0 0 8px rgba(140, 255, 0, 0.6);
+}
+
+#title.visible {
+    opacity: 1;
+
+    transform: scale(1);
+}
+
+#title .one {
+    color: #b4ff48;
+}
+
+/* =====================================
+   PLAY
+   ===================================== */
+
+#playButton {
+    position: relative;
+
+    z-index: 5;
+
+    margin-top: 55px;
+
+    padding: 13px 45px;
+
+    background: transparent;
+
+    border: 1px solid #8cff00;
+
+    color: #8cff00;
+
+    font-size: 18px;
+
+    letter-spacing: 5px;
+
+    cursor: pointer;
+
+    opacity: 0;
+
+    transition:
+        opacity 1s ease,
+        background 0.2s ease,
+        color 0.2s ease;
+}
+
+#playButton.visible {
+    opacity: 1;
+}
+
+#playButton:hover {
+    background: #8cff00;
+
+    color: #050505;
+}
+
+#playButton:active {
+    transform: scale(0.97);
+}
+
+/* =====================================
+   GAME UI
+   ===================================== */
+
+#gameUI {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 10;
+
+    pointer-events: none;
+
+    display: none;
+}
+
+#crosshair {
+    position: absolute;
+
+    top: 50%;
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+
+    color: rgba(255, 255, 255, 0.8);
+
+    font-size: 18px;
+}
+
+/* =====================================
+   FADE
+   ===================================== */
+
+#intro.hidden {
+    opacity: 0;
+
+    pointer-events: none;
+}
+
+/* =====================================
+   MOBILE
+   ===================================== */
+
+@media (max-width: 700px) {
+
+    #title {
+        font-size: 48px;
+
+        letter-spacing: 3px;
+
+        gap: 10px;
     }
 
-    createIntro() {
+    #playButton {
+        margin-top: 35px;
 
-        // =========================
-        // INTRO OVERLAY
-        // =========================
+        padding: 11px 30px;
 
-        this.overlay = document.createElement("div");
-
-        this.overlay.id = "intro-screen";
-
-        this.overlay.innerHTML = `
-            <div id="intro-title">
-                GODMOTHER 1
-            </div>
-
-            <button id="play-button">
-                PLAY
-            </button>
-        `;
-
-        document.body.appendChild(this.overlay);
-
-        // =========================
-        // PLAY BUTTON
-        // =========================
-
-        document
-            .getElementById("play-button")
-            .addEventListener("click", () => {
-
-                this.startGame();
-
-            });
-    }
-
-    startGame() {
-
-        this.finished = true;
-
-        this.overlay.style.opacity = "0";
-
-        setTimeout(() => {
-
-            this.overlay.remove();
-
-        }, 1000);
-
-        console.log("Godmother 1 started.");
-
-    }
-
-    update(delta) {
-
-        if (this.finished) {
-            return;
-        }
-
-        this.time += delta;
-
-        // Slight title movement
-        const title =
-            document.getElementById("intro-title");
-
-        if (title) {
-
-            const scale =
-                1 +
-                Math.sin(this.time * 2) * 0.015;
-
-            title.style.transform =
-                `translate(-50%, -50%) scale(${scale})`;
-        }
+        font-size: 16px;
     }
 }
