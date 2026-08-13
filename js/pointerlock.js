@@ -21,50 +21,54 @@ export class PointerLock {
 
     setup() {
 
+        // Find the existing PLAY button
         const playButton =
             document.getElementById(
                 "playButton"
             );
 
 
-        // Lock the mouse when PLAY is clicked
+        if (!playButton) {
 
-        if (playButton) {
-
-            playButton.addEventListener(
-                "click",
-                () => {
-
-                    this.controls.lock();
-
-                }
+            console.error(
+                "Godmother 1: PLAY button not found."
             );
 
+            return;
         }
 
 
-        // ESC automatically unlocks
-        // PointerLockControls handles this.
+        // PLAY locks the mouse
+        playButton.addEventListener(
+            "click",
+            () => {
+
+                this.controls.lock();
+
+            }
+        );
 
 
+        // Pointer successfully locked
         this.controls.addEventListener(
             "lock",
             () => {
 
                 console.log(
-                    "Pointer locked"
+                    "Godmother 1: Pointer locked"
                 );
 
             }
         );
 
 
+        // ESC unlocks it
         this.controls.addEventListener(
             "unlock",
             () => {
 
                 console.log(
-                    "Pointer unlocked"
+                    "Godmother 1: Pointer unlocked"
                 );
 
             }
