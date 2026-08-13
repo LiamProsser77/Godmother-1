@@ -13,11 +13,9 @@ export class Player {
 
         this.renderer = renderer;
 
-        this.controls =
-            new PointerLockControls(
-                camera,
-                document.body
-            );
+        // =====================================
+        // MOVEMENT SETTINGS
+        // =====================================
 
         this.speed = 3.5;
 
@@ -28,9 +26,26 @@ export class Player {
             d: false
         };
 
+
+        // =====================================
+        // POINTER LOCK
+        // =====================================
+
+        this.controls =
+            new PointerLockControls(
+                this.camera,
+                document.body
+            );
+
+
+        // =====================================
+        // SETUP
+        // =====================================
+
         this.setupKeyboard();
 
-        this.setupMouse();
+        this.setupPointerLock();
+
     }
 
 
@@ -44,21 +59,26 @@ export class Player {
             "keydown",
             (event) => {
 
-                if (event.code === "KeyW") {
-                    this.keys.w = true;
+                switch (event.code) {
+
+                    case "KeyW":
+                        this.keys.w = true;
+                        break;
+
+                    case "KeyA":
+                        this.keys.a = true;
+                        break;
+
+                    case "KeyS":
+                        this.keys.s = true;
+                        break;
+
+                    case "KeyD":
+                        this.keys.d = true;
+                        break;
+
                 }
 
-                if (event.code === "KeyA") {
-                    this.keys.a = true;
-                }
-
-                if (event.code === "KeyS") {
-                    this.keys.s = true;
-                }
-
-                if (event.code === "KeyD") {
-                    this.keys.d = true;
-                }
             }
         );
 
@@ -67,35 +87,64 @@ export class Player {
             "keyup",
             (event) => {
 
-                if (event.code === "KeyW") {
-                    this.keys.w = false;
+                switch (event.code) {
+
+                    case "KeyW":
+                        this.keys.w = false;
+                        break;
+
+                    case "KeyA":
+                        this.keys.a = false;
+                        break;
+
+                    case "KeyS":
+                        this.keys.s = false;
+                        break;
+
+                    case "KeyD":
+                        this.keys.d = false;
+                        break;
+
                 }
 
-                if (event.code === "KeyA") {
-                    this.keys.a = false;
-                }
-
-                if (event.code === "KeyS") {
-                    this.keys.s = false;
-                }
-
-                if (event.code === "KeyD") {
-                    this.keys.d = false;
-                }
             }
         );
+
     }
 
 
     // =====================================
-    // MOUSE / POINTER LOCK
+    // POINTER LOCK
     // =====================================
 
-    setupMouse() {
+    setupPointerLock() {
+
+        // Click the game to lock the mouse
 
         document.addEventListener(
             "click",
-            () => {
+            (event) => {
+
+                // Don't steal the mouse from
+                // the intro PLAY button.
+
+                const playButton =
+                    document.getElementById(
+                        "playButton"
+                    );
+
+
+                if (
+                    playButton &&
+                    playButton.contains(
+                        event.target
+                    )
+                ) {
+
+                    return;
+
+                }
+
 
                 if (
                     !this.controls.isLocked
@@ -104,32 +153,43 @@ export class Player {
                     this.controls.lock();
 
                 }
+
             }
         );
 
+
+        // Mouse successfully locked
 
         this.controls.addEventListener(
             "lock",
             () => {
 
                 console.log(
-                    "Mouse locked"
+                    "MABEL 1: Mouse locked"
                 );
 
             }
         );
 
+
+        // Mouse released with ESC
 
         this.controls.addEventListener(
             "unlock",
             () => {
 
                 console.log(
-                    "Mouse unlocked"
+                    "MABEL 1: Mouse unlocked"
                 );
+
+                this.keys.w = false;
+                this.keys.a = false;
+                this.keys.s = false;
+                this.keys.d = false;
 
             }
         );
+
     }
 
 
@@ -138,6 +198,9 @@ export class Player {
     // =====================================
 
     update(delta) {
+
+        // Don't move unless the mouse
+        // is currently locked.
 
         if (
             !this.controls.isLocked
@@ -152,6 +215,8 @@ export class Player {
             this.speed * delta;
 
 
+        // Forward
+
         if (this.keys.w) {
 
             this.controls.moveForward(
@@ -160,6 +225,8 @@ export class Player {
 
         }
 
+
+        // Backward
 
         if (this.keys.s) {
 
@@ -170,6 +237,8 @@ export class Player {
         }
 
 
+        // Left
+
         if (this.keys.a) {
 
             this.controls.moveRight(
@@ -179,6 +248,8 @@ export class Player {
         }
 
 
+        // Right
+
         if (this.keys.d) {
 
             this.controls.moveRight(
@@ -186,11 +257,46 @@ export class Player {
             );
 
         }
+
     }
 
 
     // =====================================
-    // LOCK STATE
+    // LOCK
+    // =====================================
+
+    lock() {
+
+        if (
+            !this.controls.isLocked
+        ) {
+
+            this.controls.lock();
+
+        }
+
+    }
+
+
+    // =====================================
+    // UNLOCK
+    // =====================================
+
+    unlock() {
+
+        if (
+            this.controls.isLocked
+        ) {
+
+            this.controls.unlock();
+
+        }
+
+    }
+
+
+    // =====================================
+    // CHECK LOCK
     // =====================================
 
     isLocked() {
@@ -199,17 +305,4 @@ export class Player {
 
     }
 
-
-    lock() {
-
-        this.controls.lock();
-
-    }
-
-
-    unlock() {
-
-        this.controls.unlock();
-
-    }
 }
